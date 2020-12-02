@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <!-- <script src="audio.js" defer></script> -->
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/audio.js" defer></script>
     <title>useless</title>
   </head>
   <body>
@@ -21,44 +21,5 @@
       step=".01"
     />
     <input type="number" id="freq" name="freq" value="220" />
-    <script>
-      const volume = document.querySelector("input[id='volume']");
-      const freq = document.querySelector("input[id='freq']");
-      const startButton = document.querySelector("button[id='start']");
-      const stopButton = document.querySelector("button[id='stop']");
-      const audioContext = new AudioContext();
-      audioContext.suspend();
-
-      let masterVolume = audioContext.createGain();
-      let osc = audioContext.createOscillator();
-
-      masterVolume.connect(audioContext.destination);
-      osc.connect(masterVolume);
-
-      masterVolume.gain.value = volume.value;
-      osc.frequency.value = freq.value;
-
-      osc.start(0);
-
-      startButton.addEventListener("click", () => {
-        if (audioContext.state === "suspended") {
-          audioContext.resume().then(() => {
-            console.log("Resumed audioContext");
-          });
-        }
-      });
-
-      stopButton.addEventListener("click", () => {
-        audioContext.suspend();
-      });
-
-      volume.addEventListener("change", () => {
-        masterVolume.gain.value = volume.value;
-      });
-
-      freq.addEventListener("change", () => {
-        osc.frequency.value = freq.value;
-      });
-    </script>
   </body>
 </html>
