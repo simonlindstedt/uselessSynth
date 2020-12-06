@@ -42,8 +42,6 @@ for (let i = 0; i < numberOfOscs; i++) {
 startOscillators(oscs);
 setFrequency(oscs, freq.value);
 
-// test
-
 window.addEventListener("resize", () => {
   w = window.innerHeight;
   h = window.innerWidth;
