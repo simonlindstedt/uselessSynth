@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/createSeq.js" defer></script>
+    <script src="js/runSeq.js" defer></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <main class="flex">
+      <button id="start" name="start">Start</button>
+      <button id="stop" name="stop">Stop</button>
+      <input type="number" id="bpm" name="bpm" value="120" />
+      <select name="note-length" id="note-length">
+        <option value="0.25">1/1</option>
+        <option value="0.5">1/2</option>
+        <option value="1" selected>1/4</option>
+        <option value="2">1/8</option>
+        <option value="4">1/16</option>
+      </select>
+      <div class="pulse"></div>
+      <label for="volume">Volume</label>
+      <input
+        id="volume"
+        name="volume"
+        type="range"
+        min="0"
+        max=".8"
+        value="0"
+        step=".01"
+      />
+    </main>
+  </body>
+</html>
