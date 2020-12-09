@@ -3,22 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/style.css" />
     <title>drunk</title>
   </head>
   <body>
-    <main class="flex-center-align">
-      <div class="controls">
+    <main>
+      <section class="controls">
         <button class="start" id="start">Play</button>
         <button class="stop" id="stop">Pause</button>
-        <label for="note-length">note length</label>
-        <select name="note-length" id="note-length">
-          <option value="0.25">1/1</option>
-          <option value="0.5">1/2</option>
-          <option value="1" selected>1/4</option>
-          <option value="2">1/8</option>
-          <option value="4">1/16</option>
-        </select>
+          <label for="note-length">note length</label>
+          <select name="note-length" id="note-length">
+            <option value="0.25">1/1</option>
+            <option value="0.5">1/2</option>
+            <option value="1" selected>1/4</option>
+            <option value="2">1/8</option>
+            <option value="4">1/16</option>
+          </select>
         <label for="tempo">tempo</label>
         <select name="tempo" id="tempo">
           <option value="lento">Lento</option>
@@ -26,13 +26,13 @@
           <option value="allegro" selected>Allegro</option>
           <option value="presto">Presto</option>
         </select>
-        <!-- <label for="sequence-length">Seqence Length</label>
+        <label for="sequence-length">sequence length</label>
         <select name="sequence-length" id="sequence-length">
           <option value="4">4</option>
           <option value="8" selected>8</option>
           <option value="16">16</option>
           <option value="32">32</option>
-        </select> -->
+        </select>
         <label for="volume">volume</label>
         <input
           id="volume"
@@ -44,8 +44,12 @@
           step=".01"
         />
       </div>
+      </section>
+      <section class="sequencer">
+      </section>
+      <section class="sequencer-notes">
+      </section>
     </main>
-    <script src="js/createSeq.js"></script>
     <script src="js/sequencer.js"></script>
   </body>
 </html>
