@@ -16,9 +16,9 @@ main {
   justify-content: center;
 }
 
-.blink {
+/* .pink {
   background-color: hotpink;
-}
+} */
 
 .sequencer {
   display: flex;
@@ -33,6 +33,10 @@ main {
   height: 32px;
   border-radius: 4px;
   border: 1px solid grey;
+}
+
+.step.pink {
+  background-color: hotpink;
 }
 
 .step.active {
