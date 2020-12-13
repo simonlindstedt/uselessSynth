@@ -16,9 +16,9 @@ main {
   justify-content: center;
 }
 
-/* .pink {
+.pink {
   background-color: hotpink;
-} */
+}
 
 .sequencer,
 .sequencer-notes,
@@ -26,6 +26,38 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.controls {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 320px;
+  display: none;
+  flex-direction: column;
+  margin: 16px;
+  padding: 16px;
+  border: 1px solid black;
+  border-radius: 4px;
+}
+
+.controls *:not(label) {
+  margin: 4px 0px;
+}
+
+.controls.active {
+  display: flex;
+}
+
+.buttons {
+  width: 320px;
+  display: flex;
+  justify-content: flex-start;
+  margin: 16px;
+}
+
+.buttons button {
+  margin: 4px;
 }
 
 .step {
@@ -48,10 +80,6 @@ main {
   border: 2px solid black;
 }
 
-.step.pink,
-.time-marker.pink {
-  background-color: hotpink;
-}
 .sequencer-notes select {
   margin: 4px;
   width: 32px;

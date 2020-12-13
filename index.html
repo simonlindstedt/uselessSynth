@@ -9,9 +9,6 @@
   <body>
     <main>
       <section class="controls">
-        <!-- <button class="start" id="start">Play</button> -->
-        <!-- <button class="stop" id="stop">Stop</button> -->
-        <button class="play" id="play">Play</button>
         <label for="note-length">note length</label>
         <select name="note-length" id="note-length">
           <option value="0.25">1/1</option>
@@ -37,7 +34,12 @@
           value=".1"
           step=".01"
         />
+        <button>close</button>
       </section>
+      <div class="buttons">
+        <button class="play" id="play">Play</button>
+        <button class="settings" id="settings">Settings</button>
+      </div>
       <section class="sequencer"></section>
       <section class="sequencer-notes"></section>
       <section class="sequencer-time"></section>

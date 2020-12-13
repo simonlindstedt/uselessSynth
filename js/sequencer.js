@@ -1,11 +1,16 @@
 // Controls
 const playPauseButton = document.querySelector("button[id='play']");
+const settingsButton = document.querySelector("button[id='settings']");
+const closeButton = document.querySelector(".controls button");
+const controls = document.querySelector(".controls");
 const sequencer = document.querySelector(".sequencer");
 const sequencerNotes = document.querySelector(".sequencer-notes");
 const sequencerTime = document.querySelector(".sequencer-time");
 const tempoSelect = document.querySelector("#tempo");
 const noteLength = document.querySelector("#note-length");
 const masterVol = document.querySelector("input[id='volume']");
+let windowHeigth = window.innerHeight;
+let windowWidth = window.innerWidth;
 
 editSequencer();
 const steps = document.querySelectorAll(".step");
@@ -15,7 +20,6 @@ const timeMarkers = document.querySelectorAll(".time-marker");
 // Init-variables
 let pulse;
 let noteTime;
-let feedbackGain = 0.01;
 let count = 0;
 
 // Audio
@@ -41,9 +45,12 @@ badOsc.type = "sawtooth";
 const delay = audioCtx.createDelay();
 delay.delayTime.value = 0.5;
 const feedback = audioCtx.createGain();
+const filter = audioCtx.createBiquadFilter();
+filter.type = "lowpass";
 
 // Connections
-master.connect(audioCtx.destination);
+filter.connect(audioCtx.destination);
+master.connect(filter);
 oscEnv.connect(master);
 oscGain.connect(oscEnv);
 osc.connect(oscGain);
@@ -79,18 +86,50 @@ playPauseButton.addEventListener("click", () => {
   }
 });
 
+settingsButton.addEventListener("click", () => {
+  controls.classList.toggle("active");
+});
+
+closeButton.addEventListener("click", () => {
+  controls.classList.toggle("active");
+});
+
 masterVol.addEventListener("change", () => {
-  // e.target.value ?
+  // set value over time?
   master.gain.value = masterVol.value;
 });
 
 tempoSelect.addEventListener("change", () => {
-  runSequencer(true);
+  if (playPauseButton.id === "pause") {
+    runSequencer(true);
+  }
 });
 
 noteLength.addEventListener("change", () => {
-  runSequencer(true);
+  if (playPauseButton.id === "pause") {
+    runSequencer(true);
+  }
 });
+
+window.addEventListener("resize", () => {
+  windowWidth = window.innerHeight;
+  windowHeigth = window.innerWidth;
+});
+
+document.body.addEventListener("mousemove", (e) => {
+  filter.frequency.value = scaleValueX(1000, 6000, e.x);
+  osc.detune.value = scaleValueY(-50, 50, e.y);
+});
+
+function scaleValueX(min, max, xPosition) {
+  let increment = (max - min) / windowWidth;
+  return increment * xPosition + min;
+}
+
+function scaleValueY(max, min, yPosition) {
+  let increment = (max - min) / windowHeigth;
+  return increment * yPosition + min;
+}
 
 function editSequencer(max = 8) {
   if (max > 16) {
@@ -168,7 +207,7 @@ function randomRange(min, max) {
   return random;
 }
 
-function playDrunkNote(step, time, pitch) {
+function playDrunkNote(step, pitch, time) {
   if (noteTime) {
     clearTimeout(noteTime);
   }
@@ -196,7 +235,7 @@ function startNote(pitch) {
     detuneValue = 30;
   }
   osc.frequency.value = pitch;
-  badOsc.frequency.value = pitch;
+  badOsc.frequency.value = osc.frequency.value;
   badOsc.detune.value = detuneValue;
   oscEnv.gain.setTargetAtTime(1, startTime, 0.1);
 }
@@ -206,6 +245,13 @@ function stopNote() {
   oscEnv.gain.setTargetAtTime(0, stopTime, 0.01);
 }
 
+function timeBlink(timeMarker, time) {
+  timeMarker.classList.toggle("pink");
+  setTimeout(() => {
+    timeMarker.classList.toggle("pink");
+  }, time * 0.9);
+}
+
 function runSequencer(play = true) {
   if (play) {
     if (pulse) {
@@ -213,20 +259,22 @@ function runSequencer(play = true) {
     }
 
     let time = bpmToMil(tempoSelect.value, noteLength.value);
-
+    let feedbackGain = 0.01;
     let length = steps.length - 1;
 
     pulse = setInterval(() => {
-      playDrunkNote(steps[count], time, stepNotes[count].value);
+      timeBlink(timeMarkers[count], time);
+      playDrunkNote(steps[count], stepNotes[count].value, time);
       count++;
       if (count > length) {
         count = 0;
       }
-      feedbackGain = feedbackGain * 1.001;
+      feedbackGain = feedbackGain * 1.01;
       if (feedbackGain > 1) {
         feedbackGain = 0.99;
       }
       feedback.gain.value = feedbackGain;
+      console.log(feedback.gain.value);
     }, time);
   } else if (!play) {
     clearInterval(pulse);
