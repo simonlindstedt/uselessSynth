@@ -1,50 +1,82 @@
 // Controls
-const startButton = document.querySelector("button[id='start']");
-const stopButton = document.querySelector("button[id='stop']");
-const sequenceLength = document.querySelector("#sequence-length");
+const playPauseButton = document.querySelector("button[id='play']");
 const sequencer = document.querySelector(".sequencer");
 const sequencerNotes = document.querySelector(".sequencer-notes");
+const sequencerTime = document.querySelector(".sequencer-time");
 const tempoSelect = document.querySelector("#tempo");
 const noteLength = document.querySelector("#note-length");
 const masterVol = document.querySelector("input[id='volume']");
 
-editSequencer(sequenceLength.value);
+editSequencer();
 const steps = document.querySelectorAll(".step");
 const stepNotes = document.querySelectorAll(".sequencer-notes select");
+const timeMarkers = document.querySelectorAll(".time-marker");
 
 // Init-variables
 let pulse;
 let noteTime;
-let count = -1;
+let feedbackGain = 0.01;
+let count = 0;
 
 // Audio
-
 const audioCtx = new AudioContext();
 audioCtx.suspend();
+
 const master = audioCtx.createGain();
-const oscEnv = audioCtx.createGain();
-const osc = audioCtx.createOscillator();
-oscEnv.gain.value = 0;
 master.gain.value = masterVol.value;
 
+// Oscs
+const oscEnv = audioCtx.createGain();
+oscEnv.gain.value = 0;
+const oscGain = audioCtx.createGain();
+oscGain.gain.value = 0.6;
+const osc = audioCtx.createOscillator();
+osc.type = "sawtooth";
+const badOscGain = audioCtx.createGain();
+badOscGain.gain.value = 0.4;
+const badOsc = audioCtx.createOscillator();
+badOsc.type = "sawtooth";
+
+// Effects
+const delay = audioCtx.createDelay();
+delay.delayTime.value = 0.5;
+const feedback = audioCtx.createGain();
+
+// Connections
 master.connect(audioCtx.destination);
 oscEnv.connect(master);
-osc.connect(oscEnv);
+oscGain.connect(oscEnv);
+osc.connect(oscGain);
+badOscGain.connect(oscEnv);
+badOsc.connect(badOscGain);
+
+oscEnv.connect(delay);
+delay.connect(feedback);
+feedback.connect(delay);
+feedback.connect(master);
+
+// Start Oscs
 osc.start();
+badOsc.start();
 
-// fix later
-// sequenceLength.addEventListener("change", (e) => {
-//   editSequencer(e.target.value);
-// });
-
-startButton.addEventListener("click", () => {
-  audioCtx.resume();
-  runSequencer(true);
-});
-
-stopButton.addEventListener("click", () => {
-  audioCtx.suspend();
-  runSequencer(false);
+// Event listeners
+playPauseButton.addEventListener("click", () => {
+  switch (playPauseButton.id) {
+    case "play":
+      playPauseButton.id = "pause";
+      playPauseButton.classList = "pause";
+      playPauseButton.textContent = "Pause";
+      audioCtx.resume();
+      runSequencer(true);
+      break;
+    case "pause":
+      playPauseButton.id = "play";
+      playPauseButton.classList = "play";
+      playPauseButton.textContent = "Play";
+      audioCtx.suspend();
+      runSequencer(false);
+      break;
+  }
 });
 
 masterVol.addEventListener("change", () => {
@@ -68,62 +100,50 @@ function editSequencer(max = 8) {
 
   sequencer.innerHTML = "";
   sequencerNotes.innerHTML = "";
+  sequencerTime.innerHTML = "";
 
   let notes = ["A", "B", "C", "D", "E", "F", "G"];
   let pitches = [440, 494, 523, 587, 659, 699, 785];
 
+  for (let i = 0; i < pitches.length; i++) {
+    pitches[i] = pitches[i] / 2;
+  }
+
   for (let i = 0; i < max; i++) {
     let step = document.createElement("div");
-    step.id = i;
     let noteSelect = document.createElement("select");
+    let timeMarker = document.createElement("div");
     let x = 0;
 
-    step.className = "step active";
+    if (i === 0) {
+      step.classList.add("step", "active");
+    } else if (Math.random() > 0.4) {
+      step.classList.add("step", "active");
+    } else {
+      step.classList.add("step");
+    }
+
     step.addEventListener("click", (e) => {
       e.target.classList.toggle("active");
     });
+
+    timeMarker.classList.add("time-marker");
 
     notes.forEach((note) => {
       let option = document.createElement("option");
       option.textContent = note;
       option.value = pitches[x];
+      if (x === Math.floor(Math.random() * 8)) {
+        option.setAttribute("selected", "");
+      }
       noteSelect.appendChild(option);
       x++;
     });
 
     sequencer.appendChild(step);
     sequencerNotes.appendChild(noteSelect);
+    sequencerTime.appendChild(timeMarker);
   }
-}
-
-function runSequencer(play = true) {
-  if (play) {
-    if (pulse) {
-      clearInterval(pulse);
-    }
-
-    let time = bpmToMil(tempoSelect.value, noteLength.value);
-    let count = 0;
-    let length = sequenceLength.value - 1;
-
-    pulse = setInterval(() => {
-      playNote(steps[count], time, stepNotes[count].value);
-      count++;
-      if (count > length) {
-        count = 0;
-      }
-    }, time);
-  } else if (!play) {
-    clearInterval(pulse);
-  }
-}
-
-function randomRange(min, max) {
-  let random = Math.floor(Math.random() * max + 1);
-  if (random < min) {
-    return min;
-  }
-  return random;
 }
 
 function bpmToMil(tempo, noteLength = 1) {
@@ -140,42 +160,75 @@ function bpmToMil(tempo, noteLength = 1) {
   return (60000 / tempo) * noteLength;
 }
 
-function playNote(step, time, pitch) {
+function randomRange(min, max) {
+  let random = Math.floor(Math.random() * max + 1);
+  if (random < min) {
+    return min;
+  }
+  return random;
+}
+
+function playDrunkNote(step, time, pitch) {
   if (noteTime) {
     clearTimeout(noteTime);
-    console.log("hello clear");
   }
+
+  let randomTime = Math.floor(Math.random() * time);
+
+  if (randomTime < time * 0.2) {
+    randomTime = time;
+  }
+
   if (step.classList.contains("active")) {
     step.classList.toggle("pink");
     startNote(pitch);
     noteTime = setTimeout(() => {
       step.classList.toggle("pink");
       stopNote();
-    }, time * 0.9);
+    }, randomTime * 0.9);
   }
 }
 
 function startNote(pitch) {
+  let startTime = audioCtx.currentTime;
+  let detuneValue = Math.floor(Math.random() * 100);
+  if (detuneValue < 30) {
+    detuneValue = 30;
+  }
   osc.frequency.value = pitch;
-  oscEnv.gain.value = 1;
+  badOsc.frequency.value = pitch;
+  badOsc.detune.value = detuneValue;
+  oscEnv.gain.setTargetAtTime(1, startTime, 0.1);
 }
+
 function stopNote() {
-  oscEnv.gain.value = 0;
+  let stopTime = audioCtx.currentTime;
+  oscEnv.gain.setTargetAtTime(0, stopTime, 0.01);
 }
 
-// fix drunk later
+function runSequencer(play = true) {
+  if (play) {
+    if (pulse) {
+      clearInterval(pulse);
+    }
 
-// function drunkBlink(step, time) {
-//   let randomTime = Math.floor(Math.random() * time);
+    let time = bpmToMil(tempoSelect.value, noteLength.value);
 
-//   if (step.classList.contains("active")) {
-//     setTimeout(() => {
-//       step.classList.toggle("blink");
-//       console.log("start");
-//       setTimeout(() => {
-//         step.classList.toggle("blink");
-//         console.log("stop");
-//       }, randomTime * 0.9);
-//     }, randomTime);
-//   }
-// }
+    let length = steps.length - 1;
+
+    pulse = setInterval(() => {
+      playDrunkNote(steps[count], time, stepNotes[count].value);
+      count++;
+      if (count > length) {
+        count = 0;
+      }
+      feedbackGain = feedbackGain * 1.001;
+      if (feedbackGain > 1) {
+        feedbackGain = 0.99;
+      }
+      feedback.gain.value = feedbackGain;
+    }, time);
+  } else if (!play) {
+    clearInterval(pulse);
+  }
+}

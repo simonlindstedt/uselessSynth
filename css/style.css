@@ -20,7 +20,9 @@ main {
   background-color: hotpink;
 } */
 
-.sequencer {
+.sequencer,
+.sequencer-notes,
+.sequencer-time {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,18 +37,20 @@ main {
   border: 1px solid grey;
 }
 
-.step.pink {
-  background-color: hotpink;
+.time-marker {
+  margin: 4px;
+  height: 8px;
+  width: 32px;
+  border: 1px solid grey;
 }
 
 .step.active {
   border: 2px solid black;
 }
 
-.sequencer-notes {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.step.pink,
+.time-marker.pink {
+  background-color: hotpink;
 }
 .sequencer-notes select {
   margin: 4px;
