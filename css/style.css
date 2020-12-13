@@ -16,6 +16,13 @@ main {
   justify-content: center;
 }
 
+header {
+  position: absolute;
+  top: 0;
+  margin: 0px calc(50% - 160px);
+  width: 320px;
+}
+
 .pink {
   background-color: hotpink;
 }
