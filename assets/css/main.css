@@ -1,0 +1,17 @@
+:root {
+  --sequence-item-size: 40px;
+  --blink-color: rgb(253, 131, 192);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+main {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
