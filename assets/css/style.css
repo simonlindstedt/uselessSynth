@@ -44,8 +44,8 @@ select {
 }
 
 .text-content {
-  max-width: 360px;
-  padding: 16px;
+  max-width: 384px;
+  padding: 4px;
 }
 
 .text-content h1 {
