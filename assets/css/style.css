@@ -1,10 +1,28 @@
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("../fonts/IBMPlexMono-Medium.woff2") format("woff2"),
+    url("../fonts/IBMPlexMono-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("../fonts/IBMPlexMono-Bold.woff2") format("woff2"),
+    url("../fonts/IBMPlexMono-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: sans-serif;
+  font-family: "IBM Plex Mono";
 }
 
 main {
@@ -20,6 +38,11 @@ header {
   position: absolute;
   top: 0;
   margin: 0px calc(50% - 160px);
+}
+
+button,
+select {
+  font-family: "IBM Plex Mono";
 }
 
 .pink {
