@@ -20,7 +20,6 @@ header {
   position: absolute;
   top: 0;
   margin: 0px calc(50% - 160px);
-  width: 320px;
 }
 
 .pink {
@@ -32,14 +31,22 @@ header {
 .sequencer-time {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   align-items: center;
+}
+
+.mouse-values {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 0.8rem;
 }
 
 .controls {
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 320px;
+  max-width: 320px;
   display: none;
   flex-direction: column;
   margin: 16px;
@@ -90,4 +97,12 @@ header {
 .sequencer-notes select {
   margin: 4px;
   width: 32px;
+}
+
+@media only screen and (max-width: 400px) {
+  .sequencer,
+  .sequencer-notes,
+  .sequencer-time {
+    width: 160px;
+  }
 }

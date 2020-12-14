@@ -2,12 +2,11 @@
 const playPauseButton = document.querySelector("button[id='play']");
 const settingsButton = document.querySelector("button[id='settings']");
 const closeButton = document.querySelector(".controls button");
+const mouseValues = document.querySelectorAll(".mouse-values p");
 const controls = document.querySelector(".controls");
 const tempoSelect = document.querySelector("#tempo");
 const noteLength = document.querySelector("#note-length");
 const masterVol = document.querySelector("input[id='volume']");
-let windowHeigth = window.innerHeight;
-let windowWidth = window.innerWidth;
 
 // Init-variables
 let pulse;
@@ -103,23 +102,24 @@ noteLength.addEventListener("change", () => {
   }
 });
 
-window.addEventListener("resize", () => {
-  windowWidth = window.innerHeight;
-  windowHeigth = window.innerWidth;
-});
-
 document.body.addEventListener("mousemove", (e) => {
-  filter.frequency.value = scaleValueX(1000, 6000, e.x);
-  osc.detune.value = scaleValueY(-50, 50, e.y);
+  filter.frequency.value = scaleValueX(1000, 6000, e.x, window.innerWidth);
+  osc.detune.value = scaleValueY(-50, 50, e.y, window.innerHeight);
+  mouseValues[0].innerHTML = `<b>${Math.floor(
+    filter.frequency.value
+  )}</b> filter frequency`;
+  mouseValues[1].innerHTML = `<b>${Math.floor(
+    osc.detune.value
+  )}</b> detune value`;
 });
 
-function scaleValueX(min, max, xPosition) {
-  let increment = (max - min) / windowWidth;
+function scaleValueX(min, max, xPosition, scale) {
+  let increment = (max - min) / scale;
   return increment * xPosition + min;
 }
 
-function scaleValueY(max, min, yPosition) {
-  let increment = (max - min) / windowHeigth;
+function scaleValueY(max, min, yPosition, scale) {
+  let increment = (max - min) / scale;
   return increment * yPosition + min;
 }
 
@@ -190,6 +190,7 @@ function timeBlink(timeMarker, time) {
   }, time * 0.9);
 }
 
+// Somtimes bugs out and gets stuck on pink, please fix.
 function runSequencer(play = true) {
   if (play) {
     if (pulse) {
@@ -203,6 +204,7 @@ function runSequencer(play = true) {
     pulse = setInterval(() => {
       timeBlink(timeMarkers[count], time);
       playDrunkNote(steps[count], stepNotes[count].value, time);
+
       count++;
       if (count > length) {
         count = 0;
@@ -212,7 +214,6 @@ function runSequencer(play = true) {
         feedbackGain = 0.99;
       }
       feedback.gain.value = feedbackGain;
-      console.log(feedback.gain.value);
     }, time);
   } else if (!play) {
     clearInterval(pulse);
