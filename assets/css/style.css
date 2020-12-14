@@ -114,8 +114,8 @@ select {
 .step {
   cursor: pointer;
   margin: 4px;
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 4px;
   border: 1px solid grey;
 }
@@ -123,7 +123,7 @@ select {
 .time-marker {
   margin: 4px;
   height: 8px;
-  width: 32px;
+  width: 40px;
   border: 1px solid grey;
 }
 
@@ -133,14 +133,14 @@ select {
 
 .sequencer-notes select {
   margin: 4px;
-  width: 32px;
+  width: 40px;
 }
 
 @media only screen and (max-width: 400px) {
   .sequencer,
   .sequencer-notes,
   .sequencer-time {
-    width: 160px;
+    width: 192px;
   }
   .mouse-values {
     display: none;
