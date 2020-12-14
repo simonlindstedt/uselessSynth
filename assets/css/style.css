@@ -34,12 +34,6 @@ main {
   justify-content: center;
 }
 
-header {
-  position: absolute;
-  top: 0;
-  margin: 0px calc(50% - 160px);
-}
-
 button,
 select {
   font-family: "IBM Plex Mono";
@@ -47,6 +41,24 @@ select {
 
 .pink {
   background-color: hotpink;
+}
+
+.text-content {
+  max-width: 360px;
+  padding: 16px;
+}
+
+.text-content h1 {
+  font-size: 2rem;
+  margin-top: 0px;
+}
+
+.text-content p {
+  line-height: 1.5rem;
+}
+
+.text-content p:last-child {
+  margin-bottom: 0px;
 }
 
 .sequencer,
@@ -59,6 +71,7 @@ select {
 }
 
 .mouse-values {
+  margin: 16px;
   position: absolute;
   top: 0;
   right: 0;
@@ -72,6 +85,7 @@ select {
   max-width: 320px;
   display: none;
   flex-direction: column;
+  background-color: white;
   margin: 16px;
   padding: 16px;
   border: 1px solid black;
@@ -89,7 +103,7 @@ select {
 .buttons {
   width: 320px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   margin: 16px;
 }
 
@@ -127,5 +141,8 @@ select {
   .sequencer-notes,
   .sequencer-time {
     width: 160px;
+  }
+  .mouse-values {
+    display: none;
   }
 }
