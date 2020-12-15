@@ -8,6 +8,10 @@ Not yet safari-proof, so I would recommend running this in chrome or firefox.
 
 Instructions on how to use the instrument are found on the site, [enjoy!]('https://sadquencer.vercel.app/')
 
+## Features to add
+
+- A proper scale picker.
+
 ## Testers
 
 - Dante Mogrim
