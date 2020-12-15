@@ -14,5 +14,5 @@ Instructions on how to use the instrument are found on the site, [enjoy!]('https
 
 ## Testers
 
-- Dante Mogrim
-- Rikard Segerkvist
+- [Dante Mogrim]('https://github.com/mogrim-91')
+- [Rikard Segerkvist]('https://github.com/rikardseg')
