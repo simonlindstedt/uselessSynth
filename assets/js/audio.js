@@ -168,6 +168,7 @@ function playDrunkNote(step, pitch, time) {
 
 function startNote(pitch) {
   let startTime = audioCtx.currentTime;
+  let smallDelay = Math.random() * 0.1;
   let detuneValue = Math.floor(Math.random() * 100);
   if (detuneValue < 30) {
     detuneValue = 30;
@@ -175,7 +176,7 @@ function startNote(pitch) {
   osc.frequency.value = pitch;
   badOsc.frequency.value = osc.frequency.value;
   badOsc.detune.value = detuneValue;
-  oscEnv.gain.setTargetAtTime(1, startTime, 0.1);
+  oscEnv.gain.setTargetAtTime(1, startTime + smallDelay, 0.1);
 }
 
 function stopNote() {
