@@ -2,7 +2,7 @@
 
 Hi!
 
-We were tasked with making a useless website, so I made an instrument that sounds kinda bad.
+I was tasked with making a useless website, so I made an instrument that sounds kinda bad.
 
 Not yet safari-proof, so I would recommend running this in chrome or firefox.
 
